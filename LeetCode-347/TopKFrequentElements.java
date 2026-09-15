@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class TopKFrequentElements {
     public static void main(String[] args) {
         int[] result = topKFrequent(new int[] {1,2,1,2,1,2,3,1,3,2}, 2);
@@ -25,22 +28,30 @@ public class TopKFrequentElements {
 
             maxFrequency = maxFrequency < map[index] ? map[index] : maxFrequency;
         }
-        int[] frequencyArray = new int[maxFrequency + 1];
+
+        List<Integer>[] frequencyArray = new List[maxFrequency + 1];
+        for(int i=0 ; i<= maxFrequency; i++) {
+            frequencyArray[i] = new ArrayList<Integer>();
+        }
+
         for(int i = 0; i < map.length; i++) {
             if(map[i] == 0) continue;
-            frequencyArray[map[i]] = i + min;
+            
+            int actualNum = i + min;
+            int frequency = map[i];
+            frequencyArray[frequency].add(actualNum);
         }
 
         int[] result = new int[k];
-
-        int freqIndex = frequencyArray.length - 1;
         int index = 0;
 
-        while(index < k) {
-            if(frequencyArray[freqIndex] != 0){
-                result[index++] = frequencyArray[freqIndex];
+        for(int i = frequencyArray.length - 1; i >= 0; i--) {
+            List<Integer> list = frequencyArray[i];
+
+            for(int num : list) {
+                result[index++] = num;
+                if(index == k) return result;
             }
-            freqIndex--;
         }
 
         return result;
